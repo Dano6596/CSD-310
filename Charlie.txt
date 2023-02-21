@@ -1,0 +1,26 @@
+mport mysql.connector
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Connect to the MySQL server
+cnx = mysql.connector.connect(user='your_username', password='your_password',
+                              host='your_host', database='your_database')
+cursor = cnx.cursor()
+
+# Execute an SQL query to retrieve the data
+query = "SELECT product, SUM(revenue) FROM sales WHERE date BETWEEN '2022-01-01' AND '2022-01-31' GROUP BY product"
+cursor.execute(query)
+data = cursor.fetchall()
+
+# Create a DataFrame from the data
+df = pd.DataFrame(data, columns=['Product', 'Revenue'])
+
+# Plot the data as a bar chart
+plt.bar(df['Product'], df['Revenue'])
+plt.xlabel('Product')
+plt.ylabel('Revenue')
+plt.title('Total Revenue by Product in January 2022')
+plt.show()
+
+# Close the connection to the MySQL server
+cnx.close()
